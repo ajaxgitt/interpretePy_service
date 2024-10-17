@@ -11,41 +11,20 @@ def variables(nombre_funcion,problema, casos_de_prueba ):
 
     verificar_code = """
 def verificar_respuestas(funcion, casos):
-    try:
-        pruebas_pasadas = 0
-        for _, caso in enumerate(casos):
-            entrada = caso["entrada"].split(",")[0]
-            entrada2 = caso["entrada"].split(",")[1]
-            try:
-                salida_esperada = int(caso["salida_esperada"])  
-            except ValueError:
-                salida_esperada = caso["salida_esperada"] 
-            
-            salida_obtenida = funcion(int(entrada), int(entrada2))
-            if salida_obtenida == salida_esperada:
-                pruebas_pasadas += 1
-                
-
-        if pruebas_pasadas == 0 :
-            return 6
-    except ValueError :
-        pruebas_pasadas = 0
-        for _, caso in enumerate(casos):
-            entrada = caso["entrada"].split(",")[0]
-            entrada2 = caso["entrada"].split(",")[1]
-            salida_esperada = caso["salida_esperada"]
-            
-            salida_obtenida = funcion(entrada, entrada2)
-            
-            if salida_obtenida == salida_esperada:
-                pruebas_pasadas += 1
-                
-
-        if pruebas_pasadas == 0 :
-            return 6
+    pruebas_pasadas = 0
+    for i, caso in enumerate(casos):
+        entrada = caso["entrada"].split(",")[0]
+        entrada2 = caso["entrada"].split(",")[1]
+        salida_esperada = int(caso["salida_esperada"])  
         
-    return pruebas_pasadas
+        salida_obtenida = funcion(int(entrada), int(entrada2))
+        
+        if salida_obtenida == salida_esperada:
+            pruebas_pasadas += 1
 
+    if pruebas_pasadas == 0 :
+        return 6
+    return pruebas_pasadas
 """
     return f"{problema}\n{verificar_code}\nprint(verificar_respuestas({nombre_funcion}, {casos_de_prueba}))"
 

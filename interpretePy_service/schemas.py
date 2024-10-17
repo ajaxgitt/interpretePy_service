@@ -12,3 +12,4 @@ class CodeShema(BaseModel):
     nombre_funcion:str
     codigo : str
     casos_de_prueba : List[TestCaseShema]
+    dificultad : int

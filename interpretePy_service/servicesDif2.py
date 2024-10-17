@@ -7,40 +7,34 @@ import subprocess
 
 
 
-def variables(nombre_funcion,problema, casos_de_prueba ):
+def variablesdif2(nombre_funcion,problema, casos_de_prueba ):
 
     verificar_code = """
 def verificar_respuestas(funcion, casos):
     try:
         pruebas_pasadas = 0
         for _, caso in enumerate(casos):
-            entrada = caso["entrada"].split(",")[0]
-            entrada2 = caso["entrada"].split(",")[1]
-            try:
-                salida_esperada = int(caso["salida_esperada"])  
-            except ValueError:
-                salida_esperada = caso["salida_esperada"] 
+            entrada = caso["entrada"]
+            salida_esperada = caso["salida_esperada"]  
             
-            salida_obtenida = funcion(int(entrada), int(entrada2))
+            salida_obtenida = funcion(int(entrada))
+            
             if salida_obtenida == salida_esperada:
                 pruebas_pasadas += 1
                 
-
         if pruebas_pasadas == 0 :
             return 6
-    except ValueError :
+    except ValueError:
         pruebas_pasadas = 0
         for _, caso in enumerate(casos):
-            entrada = caso["entrada"].split(",")[0]
-            entrada2 = caso["entrada"].split(",")[1]
-            salida_esperada = caso["salida_esperada"]
+            entrada = caso["entrada"]
+            salida_esperada = caso["salida_esperada"]  
             
-            salida_obtenida = funcion(entrada, entrada2)
-            
-            if salida_obtenida == salida_esperada:
+            salida_obtenida = funcion(entrada)
+
+            if str(salida_obtenida) == salida_esperada:
                 pruebas_pasadas += 1
                 
-
         if pruebas_pasadas == 0 :
             return 6
         
@@ -55,7 +49,7 @@ def verificar_respuestas(funcion, casos):
 
 
 # Crear un archivo temporal
-def run_codigo(codigo):
+def run_codigodif2(codigo):
     with tempfile.NamedTemporaryFile(delete=False, suffix='.py') as temp_file:
         temp_file.write(codigo.encode())
         if any(keyword in codigo and keyword not in ["import os", "import subprocess"] for keyword in ["import", "eval", "exec", "open", "sys"]):
