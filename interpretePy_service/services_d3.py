@@ -3,47 +3,42 @@ import os
 import subprocess
 
 
-def variables(nombre_funcion,problema, casos_de_prueba ):
+def variables_d3(nombre_funcion,problema, casos_de_prueba):
     verificar_code = """
+import ast
+
+
 def verificar_respuestas(funcion, casos):
-    try:
-        pruebas_pasadas = 0
-        for _, caso in enumerate(casos):
-            entrada = caso["entrada"].split(",")[0]
-            entrada2 = caso["entrada"].split(",")[1]
-            try:
-                salida_esperada = int(caso["salida_esperada"])  
-            except ValueError:
-                salida_esperada = caso["salida_esperada"] 
-            
-            salida_obtenida = funcion(int(entrada), int(entrada2))
-            if salida_obtenida == salida_esperada:
-                pruebas_pasadas += 1
-    except ValueError :
-        pruebas_pasadas = 0
-        for _, caso in enumerate(casos):
-            entrada = caso["entrada"].split(",")[0]
-            entrada2 = caso["entrada"].split(",")[1]
+    pruebas_pasadas = 0
+    for _, caso in enumerate(casos):
+        entrada_lista = ast.literal_eval(caso['entrada'])
+        try:
             salida_esperada = caso["salida_esperada"]
-            salida_obtenida = funcion(entrada, entrada2)
+            salida_obtenida = funcion(entrada_lista)
+            print(salida_obtenida,salida_esperada)
             
-            if salida_obtenida == salida_esperada:
+            if str(salida_obtenida) == salida_esperada:
                 pruebas_pasadas += 1
+        except TypeError as e:
+            salida_esperada = caso["salida_esperada"]
+            salida_obtenida = funcion(entrada_lista[0],entrada_lista[1])
+            if str(salida_obtenida) == str(salida_esperada):
+                pruebas_pasadas += 1
+    print('pruebas_pasadas', pruebas_pasadas)
     return pruebas_pasadas
 
 """
     return f"{problema}\n{verificar_code}\nprint(verificar_respuestas({nombre_funcion}, {casos_de_prueba}))"
 
-
-# Crear archivo tempooral
-def run_codigo(codigo):
+def run_codigo_d3(codigo):
     with tempfile.NamedTemporaryFile(delete=False, suffix='.py') as temp_file:
         temp_file.write(codigo.encode())
-        if any(keyword in codigo and keyword not in ["import os", "import subprocess"] for keyword in ["import", "eval", "exec", "open", "sys"]):
+        if any(keyword in codigo and keyword not in ["import os", "import subprocess"] for keyword in ["exec", "open", "sys"]):
             return 20
         temp_file_path = temp_file.name
     try:
         result = subprocess.run(['python', temp_file_path], timeout=5, text=True, capture_output=True)
+        print(result)
         if result.returncode != 0:
             if "NameError" in result.stderr:
                 return 100  
@@ -64,7 +59,6 @@ def run_codigo(codigo):
    
     finally:
         os.remove(temp_file_path)
-
 
 
 

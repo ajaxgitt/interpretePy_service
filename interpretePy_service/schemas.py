@@ -13,3 +13,4 @@ class CodeShema(BaseModel):
     codigo : str
     casos_de_prueba : List[TestCaseShema]
     dificultad : int
+    
