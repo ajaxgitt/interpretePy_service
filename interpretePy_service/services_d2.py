@@ -12,12 +12,15 @@ def verificar_respuestas(funcion, casos):
         try:
             salida_esperada = caso["salida_esperada"]
             salida_obtenida = funcion(entrada)
+            print("*****")
+            print(salida_esperada , 'salida_esperada')
+            print(salida_obtenida, 'salida_obtenida')
             if str(salida_obtenida) == salida_esperada:
                 pruebas_pasadas += 1
-            
         except TypeError as e:
             salida_esperada = caso["salida_esperada"]
             salida_obtenida = funcion(int(entrada))
+            
             if str(salida_obtenida) == str(salida_esperada):
                 pruebas_pasadas += 1
     print('pruebas_pasadas', pruebas_pasadas)
@@ -40,6 +43,8 @@ def run_codigo_d2(codigo):
         
         if result.returncode == 0:
             print(int(result.stdout.strip()[-1]))
+            print(result)
+            print(result.stdout)
             return int(result.stdout.strip()[-1])
         else:
             return result.returncode

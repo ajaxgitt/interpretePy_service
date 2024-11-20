@@ -60,7 +60,7 @@ def revisar_codigo_dificultad_2(code:CodeShema):
         }
             
 
-import ast
+
 
 
 @interprete.post('/api/code/3')
